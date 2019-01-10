@@ -12,13 +12,14 @@ const register = async (req, res) => {
   const salt = bcrypt.genSaltSync(10);
   const hash = bcrypt.hashSync(password, salt);
   const registerUser = await db.register_user([isAdmin, username, hash]);
-  console.log('registerUser: ', registerUser);
+  // console.log('registerUser: ', registerUser);
   const user = registerUser[0];
   req.session.user = {
-    isAdmin: user.isAdmin,
+    isAdmin: user.is_admin,
     id: user.id,
     username: user.username
   };
+  // console.log('req.sesson: ', req.session)
   res.status(201).json(req.session.user);
 }
 
@@ -37,7 +38,7 @@ const login = async (req, res) => {
     return res.status(403).json('Incorrect password');
   }
   req.session.user = {
-    isAdmin: user.isAdmin,
+    isAdmin: user.is_admin,
     id: user.id,
     username: user.username
   }
